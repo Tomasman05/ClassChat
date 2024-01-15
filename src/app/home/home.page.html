@@ -1,48 +1,51 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar class="bg-primary text-light">
     <ion-title>
       Class Chat
     </ion-title>
+    
+    <ion-button *ngIf="!userName" size="small" routerLink="/sign-in" shape="round" class="ml-auto">Sign In</ion-button>
+    
+    <ion-button *ngIf="userName" size="small" (click)="logout()" color="danger" shape="round" class="ms-3">Log out</ion-button>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="bg-light">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">IphoneClassChat</ion-title>
     </ion-toolbar>
   </ion-header>
-  <div class="container">
-  <div *ngFor="let message of messages" [ngClass]="message.user!=userName?'d-flex justify-content-end':''" class="row" > 
-      <div class="col-6" [ngClass]="message.user!=userName?'d-flex justify-content-end':''">
-        <div class="row ">
+  <div class="container mt-3">
+
+    <div *ngFor="let message of messages" [ngClass]="{'justify-content-start': message.user === userName, 'justify-content-end text-end': message.user !== userName}" class="row mt-3">
+      <div class="col-6">
+        <div class="row">
+          <div class="col-12 font-weight-bold">
+            {{ message.user }} <span style="font-weight: 50;">{{ message.time }}</span>
+          </div>
           <div class="col-12">
-            {{message.user}}
+            <span class="message">{{ message.content }}</span>
           </div>
-       
-        
-          <div class="col-12 ">
-          <span class="message">{{message.content}}</span>
-          <span class="time">{{message.time}}</span>
-          </div>
-          <div *ngIf="message.user==userName" class="col-12">
-            <ion-button size="small" (click)="addMessage()" shape="round">Save</ion-button>
-            <ion-button size="small" (click)="deleteMessage(message)" shape="round">Delete</ion-button>
+          <div *ngIf="message.user === userName" class="col-12 mt-2">
+            <ion-button size="small" (click)="addMessage()" color="warning" shape="round" class="mr-2">Save</ion-button>
+            <ion-button size="small" (click)="deleteMessage(message)" color="danger" shape="round">Delete</ion-button>
           </div>
         </div>
-      
-       <!-- {{message.user}}, {{message.content}} -->
+      </div>
     </div>
-  </div>  
+    
 
-    <ion-list>
-      <ion-item>
+    <ion-list class="d-flex">
+      <ion-item class="flex-grow-1 mr-2">
         <ion-textarea [(ngModel)]="newMessage" labelPlacement="floating" value="Lorem Ipsum">
           <div slot="label">Message<ion-text color="danger">(Required)</ion-text></div>
         </ion-textarea>
       </ion-item>
-    </ion-list>
 
-    <ion-button (click)="addMessage()" shape="round">Send</ion-button>
+      <ion-button *ngIf="userName" (click)="addMessage()" shape="round" color="success">Send</ion-button>
+    </ion-list>
   </div>
 </ion-content>
